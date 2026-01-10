@@ -1,18 +1,17 @@
 <?php
 
-$host = $_ENV['DB_HOST'];
-$user = $_ENV['DB_USER'];
-$pass = $_ENV['DB_PASS'];
-$db   = $_ENV['DB_NAME'];
-$port = $_ENV['DB_PORT'];
+$host = getenv("MYSQLHOST");
+$user = getenv("MYSQLUSER");
+$pass = getenv("MYSQLPASSWORD");
+$db   = getenv("MYSQLDATABASE");
+$port = getenv("MYSQLPORT");
 
 $conn = mysqli_connect($host, $user, $pass, $db, $port);
 
 if (!$conn) {
-    die(json_encode([
-        "status" => "error",
-        "message" => "DB connection failed",
-        "debug" => mysqli_connect_error()
-    ]));
+    die("DB connection failed: " . mysqli_connect_error());
 }
+
+// echo "DB Connected Successfully"; // testing ke liye
+
 ?>
