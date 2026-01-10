@@ -1,10 +1,2 @@
 <?php
-include "email.php";
-
-$result = sendVerificationMail("bgmi10ac@gmail.com", "123456");
-
-if($result === true){
-    echo "MAIL SENT";
-}else{
-    echo "MAIL FAILED: " . $result;
-}
+echo password_hash("123456", PASSWORD_DEFAULT);
