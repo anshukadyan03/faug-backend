@@ -74,7 +74,6 @@ border:2px solid #00ffcc;object-fit:cover;
 <button type="submit">REGISTER</button>
 </form>
 
-
 <div class="msg" id="msg"></div>
 </div>
 
@@ -103,23 +102,25 @@ document.getElementById("regForm").addEventListener("submit",function(e){
    return;
  }
 
+ msg.innerHTML = "Registering...";
+ msg.style.color = "#00ffcc";
+
  let form = new FormData(this);
 
  fetch("api_register.php",{ method:"POST", body:form })
  .then(r=>r.json())
  .then(d=>{
-    msg.innerHTML = d.message || "Registered successfully, check your email";
+    msg.innerHTML = d.message;
     msg.style.color = d.status=="success" ? "#0f0" : "red";
 
     if(d.status=="success"){
         setTimeout(()=>{
-            window.location = "verify.php";   // ✅ YAHI JANA CHAHIYE
+            window.location = "verify.php";   // ✅ email verify page
         },800);
     }
  });
 });
 </script>
-
 
 </body>
 </html>
