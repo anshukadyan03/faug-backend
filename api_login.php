@@ -30,7 +30,7 @@ if(mysqli_num_rows($q)==1){
         exit;
     }
 
-    if(password_verify($password, $row['password'])){
+    if($password == $row['password']){
         echo json_encode([
             "status"=>"success",
             "uid"=>$row['id'],
@@ -44,4 +44,5 @@ if(mysqli_num_rows($q)==1){
 }else{
     echo json_encode(["status"=>"error","message"=>"Email not found"]);
 }
+
 
