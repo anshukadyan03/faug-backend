@@ -1,20 +1,18 @@
 <?php
-if (!function_exists("mysqli_connect")) {
-    die("MySQLi extension not enabled on server");
-}
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$host = $_ENV['DB_HOST'];
+$user = $_ENV['DB_USER'];
+$pass = $_ENV['DB_PASS'];
+$db   = $_ENV['DB_NAME'];
+$port = $_ENV['DB_PORT'];
 
-$conn = mysqli_connect(
- "sql201.infinityfree.com",   // HOST (panel se)
- "if0_40845924",              // USER
- "tXqvb4X7udjr",               // PASSWORD
- "if0_40845924_faugdb"        // DATABASE
-);
+$conn = mysqli_connect($host, $user, $pass, $db, $port);
 
-if(!$conn){
-   die("DB CONNECTION FAILED");
+if (!$conn) {
+    die(json_encode([
+        "status" => "error",
+        "message" => "DB connection failed",
+        "debug" => mysqli_connect_error()
+    ]));
 }
 ?>
-
