@@ -15,7 +15,8 @@ if(
 
 $username = mysqli_real_escape_string($conn, $_POST['username']);
 $email    = mysqli_real_escape_string($conn, $_POST['email']);
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$password = $_POST['password']; // ✅ FIX 1: password receive
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT); // ✅ hash
 $gender   = mysqli_real_escape_string($conn, $_POST['gender']);
 $country  = mysqli_real_escape_string($conn, $_POST['country']);
 
@@ -55,11 +56,11 @@ if(!move_uploaded_file($_FILES['avatar']['tmp_name'],$path)){
 // ✅ Generate verification code
 $code = rand(100000,999999);
 
-// ✅ Insert user
+// ✅ Insert user (HASHED PASSWORD)
 $q = mysqli_query($conn,"INSERT INTO users
 (username,email,password,gender,country,avatar,coins,verified,verify_code)
 VALUES
-('$username','$email','$password','$gender','$country','$path',0,0,'$code')");
+('$username','$email','$hashedPassword','$gender','$country','$path',0,0,'$code')");
 
 if($q){
 
@@ -75,5 +76,3 @@ if($q){
 }else{
     echo json_encode(["status"=>"error","message"=>"Database error"]);
 }
-
-
