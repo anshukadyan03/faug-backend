@@ -15,7 +15,6 @@ if(
 
 $username = mysqli_real_escape_string($conn, $_POST['username']);
 $email    = mysqli_real_escape_string($conn, $_POST['email']);
-$password = $_POST['password'];
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 $gender   = mysqli_real_escape_string($conn, $_POST['gender']);
 $country  = mysqli_real_escape_string($conn, $_POST['country']);
@@ -76,4 +75,5 @@ if($q){
 }else{
     echo json_encode(["status"=>"error","message"=>"Database error"]);
 }
+
 
