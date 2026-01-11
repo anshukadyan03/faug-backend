@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
 include "config.php";
-include "email.php";   // 🔥 ye line zaroori hai
+include "email.php";   // ✅ mail file include
 
 $username = $_POST['username'] ?? '';
 $email    = $_POST['email'] ?? '';
@@ -18,7 +18,7 @@ if($username=="" || $email=="" || $password==""){
 }
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
-$code = rand(100000,999999); // 🔥 verification code
+$code = rand(100000,999999); // ✅ verification code
 
 $sql = mysqli_query($conn,"INSERT INTO users 
 (username,email,password,gender,country,coins,verified,verify_code)
@@ -27,13 +27,13 @@ VALUES
 
 if($sql){
 
-    // 🔥 email bhejo
-    $send = sendMail($email, $code);
+    // ✅ YAHAN MAIL JAAYEGI
+    $send = sendVerificationMail($email, $code);
 
-    if($send){
+    if($send === true){
         echo json_encode(["status"=>"success","message"=>"Registered, verification code sent"]);
     }else{
-        echo json_encode(["status"=>"error","message"=>"Registered but email not sent"]);
+        echo json_encode(["status"=>"error","message"=>$send]);
     }
 
 }else{
