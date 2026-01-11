@@ -45,7 +45,7 @@ border:2px solid #00ffcc;object-fit:cover;
 <input type="email" id="email" name="email" placeholder="Email" required>
 
 <input type="password" id="password" name="password" placeholder="Password" required>
-<input type="password" id="cpassword" placeholder="Confirm Password" required>
+<input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" required>
 
 <select id="gender" name="gender" required>
 <option value="">Select Gender</option>
@@ -107,7 +107,11 @@ document.getElementById("regForm").addEventListener("submit",function(e){
 
  let form = new FormData(this);
 
- fetch("api_register.php",{ method:"POST", body:form })
+fetch("api_register_clean.php", {
+   method: "POST",
+   body: form
+})
+
  .then(r=>r.json())
  .then(d=>{
     msg.innerHTML = d.message;
@@ -124,3 +128,4 @@ document.getElementById("regForm").addEventListener("submit",function(e){
 
 </body>
 </html>
+
