@@ -2,9 +2,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'phpmailer/src/Exception.php';
-require 'phpmailer/src/PHPMailer.php';
-require 'phpmailer/src/SMTP.php';
+require 'Exception.php';
+require 'PHPMailer.php';
+require 'SMTP.php';
+
 
 function sendVerificationMail($to, $code){
 
@@ -83,4 +84,5 @@ function sendVerificationMail($to, $code){
         return 'Mailer Error: ' . $mail->ErrorInfo;
     }
 }
+
 
