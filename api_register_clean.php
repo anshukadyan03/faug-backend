@@ -3,41 +3,58 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
-include "config.php"; // yahan tera DB connection hai
+include "config.php";
+include "email.php";   // jisme sendVerificationMail() function hai
 
-$username = $_POST['username'] ?? '';
-$email    = $_POST['email'] ?? '';
+// Receive data
+$username = trim($_POST['username'] ?? '');
+$email    = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $gender   = $_POST['gender'] ?? '';
 $country  = $_POST['country'] ?? '';
 
-if ($username=='' || $email=='' || $password=='') {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Missing fields"
-    ]);
+// Validate
+if ($username=='' || $email=='' || $password=='' || $gender=='' || $country=='') {
+    echo json_encode(["status"=>"error","message"=>"All fields required"]);
     exit;
 }
 
-// password hash
+// Check duplicate email
+$check = mysqli_query($conn, "SELECT id FROM users WHERE email='$email'");
+if(mysqli_num_rows($check) > 0){
+    echo json_encode(["status"=>"error","message"=>"Email already registered"]);
+    exit;
+}
+
+// Hash password
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
-// simple insert
-$sql = "INSERT INTO users (username,email,password,gender,country,coins,verified)
-        VALUES ('$username','$email','$hash','$gender','$country',0,0)";
+// Generate verify code
+$code = rand(100000,999999);
 
-if (mysqli_query($conn, $sql)) {
+// Insert user
+$sql = "INSERT INTO users (username,email,password,gender,country,coins,verified,verify_code)
+        VALUES ('$username','$email','$hash','$gender','$country',0,0,'$code')";
 
+if(mysqli_query($conn,$sql)){
+
+    // Send email
+    if(sendVerificationMail($email,$code)){
+        echo json_encode([
+            "status"=>"success",
+            "message"=>"Registered! Verification code sent to email."
+        ]);
+    } else {
+        echo json_encode([
+            "status"=>"error",
+            "message"=>"Registered but email not sent"
+        ]);
+    }
+
+}else{
     echo json_encode([
-        "status" => "success",
-        "message" => "Registered successfully"
+        "status"=>"error",
+        "message"=>"DB Error: ".mysqli_error($conn)
     ]);
-
-} else {
-
-    echo json_encode([
-        "status" => "error",
-        "message" => mysqli_error($conn)
-    ]);
-
 }
+?>
