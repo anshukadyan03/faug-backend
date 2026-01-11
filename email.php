@@ -21,7 +21,8 @@ function sendVerificationMail($to, $code){
         $mail->Username   = '9f993f001@smtp-brevo.com';
 
         // ✅ Yahan apni Brevo SMTP key paste karo
-        $mail->Password   = 'xsmtpsib-2538f7d37f30d89a80ad8aabeebc21affc799e1fa1fc477cbe66498db6bad7c6-BpTgFVkNXy4Jt0Hv';
+       $mail->Password = getenv("BREVO_SMTP_KEY");
+
 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
@@ -84,6 +85,7 @@ function sendVerificationMail($to, $code){
         return 'Mailer Error: ' . $mail->ErrorInfo;
     }
 }
+
 
 
 
